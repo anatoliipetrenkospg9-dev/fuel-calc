@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Облік витрат палива бронетехніки</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Калькулятор витрат палива</h1>
+    </header>
+
+    <div class="container">
+        
+        <!-- 1. Блок «Бронетехніка» -->
+        <section class="card">
+            <div class="card-title">1. Бронетехніка</div>
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label for="vehicleName">Назва бронетехніки*</label>
+                    <input type="text" id="vehicleName" maxlength="50" placeholder="напр., Новатор 2">
+                    <span class="error-text" id="err-vehicleName">Заповніть назву (до 50 симв.)</span>
+                </div>
+                <div class="form-group">
+                    <label for="vehicleConsumption">Норма витрат (л/100 км)*</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="vehicleConsumption" min="0" step="0.01" placeholder="35,0">
+                    </div>
+                    <span class="error-text" id="err-vehicleConsumption">Введіть число ≥ 0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Початкові дані -->
+        <section class="card">
+            <div class="card-title">2. Початкові дані перед виїздом</div>
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label for="initialSpeedometer">Спідометр (км)*</label>
+                    <input type="number" id="initialSpeedometer" min="0" step="1" placeholder="0">
+                    <span class="error-text" id="err-initialSpeedometer">Введіть число ≥ 0</span>
+                </div>
+                <div class="form-group">
+                    <label for="initialFuel">Залишок палива (л)*</label>
+                    <input type="number" id="initialFuel" min="0" step="0.1" placeholder="100">
+                    <span class="error-text" id="err-initialFuel">Введіть число ≥ 0</span>
+                </div>
+            </div>
+            <div class="form-group" style="margin-top: 10px;">
+                <label for="waybillNumber">Номер шляхового листа*</label>
+                <input type="text" id="waybillNumber" maxlength="50" placeholder="ШЛ №123">
+                <span class="error-text" id="err-waybillNumber">Обов’язкове поле</span>
+            </div>
+            <div class="form-group" style="margin-top: 10px;">
+                <label for="initialBR">БР (Бойове розпорядження)*</label>
+                <input type="text" id="initialBR" placeholder="БР №1 від 01.02.2026">
+                <span class="error-text" id="err-initialBR">Обов’язкове поле</span>
+            </div>
+        </section>
+
+        <!-- 3. Форма додавання / редагування поїздки -->
+        <section class="card" id="tripFormSection">
+            <div class="card-title" id="formTitle">3. Нова поїздка</div>
+            <form id="tripForm" onsubmit="return false;">
+                <div class="grid grid-3">
+                    <div class="form-group">
+                        <label for="tripDate">Дата*</label>
+                        <input type="date" id="tripDate">
+                        <span class="error-text" id="err-tripDate">Виберіть дату</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tripRoute">Маршрут*</label>
+                        <input type="text" id="tripRoute" maxlength="100" placeholder="Харків - Золочів">
+                        <span class="error-text" id="err-tripRoute">Введіть маршрут</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tripCount">Кількість поїздок*</label>
+                        <input type="number" id="tripCount" min="1" step="1" value="1">
+                        <span class="error-text" id="err-tripCount">Ціле число ≥ 1</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-2" style="margin-top: 10px;">
+                    <div class="form-group">
+                        <label for="depTime">Час вибуття*</label>
+                        <input type="time" id="depTime">
+                        <span class="error-text" id="err-depTime">Вкажіть час</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="arrTime">Час прибуття*</label>
+                        <input type="time" id="arrTime">
+                        <span class="error-text" id="err-arrTime">Вкажіть час</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-2" style="margin-top: 10px;">
+                    <div class="form-group">
+                        <label for="distLoaded">Дистанція з вантажем (км)*</label>
+                        <input type="number" id="distLoaded" min="0" step="0.1" value="0">
+                        <span class="error-text" id="err-distLoaded">Число ≥ 0</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="distUnloaded">Дистанція без вантажу (км)*</label>
+                        <input type="number" id="distUnloaded" min="0" step="0.1" value="0">
+                        <span class="error-text" id="err-distUnloaded">Число ≥ 0</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-2" style="margin-top: 10px;">
+                    <div class="form-group">
+                        <label for="cargoName">Найменування вантажу</label>
+                        <input type="text" id="cargoName" maxlength="50" placeholder="о/с, БК, ПММ">
+                    </div>
+                    <div class="form-group">
+                        <label for="cargoAmount">Кількість вантажу (т)*</label>
+                        <input type="number" id="cargoAmount" min="0" step="0.01" value="0">
+                        <span class="error-text" id="err-cargoAmount">Число ≥ 0</span>
+                    </div>
+                </div>
+
+            <!-- Автоматичний розрахунок (Live Preview) -->
+            <div class="calc-preview">
+                <div style="font-weight: bold; margin-bottom: 6px; color: var(--primary-dark);">Розрахунок поїздки:</div>
+                
+                <div class="calc-preview-row">
+                    <span>Дистанція з вантажем:</span>
+                    <span id="prevDistLoaded">0 км</span>
+                </div>
+                <div class="calc-preview-row">
+                    <span>Дистанція без вантажу:</span>
+                    <span id="prevDistUnloaded">0 км</span>
+                </div>
+                <div class="calc-preview-row">
+                    <span>Дистанція Усього:</span>
+                    <span id="prevTotalDist">0 км</span>
+                </div>
+                <div class="calc-preview-row">
+                    <span>Спідометр після поїздки:</span>
+                    <span id="prevSpeedometer">0 км</span>
+                </div>
+                <div class="calc-preview-row">
+                    <span>БР:</span>
+                    <span id="prevBR">-</span>
+                </div>
+                <div class="calc-preview-row">
+                    <span>Розхід з вантажем:</span>
+                    <span id="prevLoadedCons">0 л/100 км</span>
+                </div>
+                <div class="calc-preview-row">
+                    <span>Рух по бездоріжжю:</span>
+                    <span id="prevOffRoad">0 = 0 л</span>
+                </div>
+                <div class="calc-preview-row bold">
+                    <span>Залишок палива:</span>
+                    <span id="prevFuelRemaining">0 л</span>
+                </div>
+                <div class="warning-badge" id="fuelWarning">
+                    Увага! Від'ємний залишок палива!
+                </div>
+            </div>
+
+                <div class="btn-group" style="margin-top: 14px;">
+                    <button type="button" class="btn btn-primary" id="btnSaveTrip">Додати поїздку</button>
+                    <button type="button" class="btn btn-secondary hidden" id="btnCancelEdit">Скасувати редагування</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 4. Список доданих поїздок -->
+        <section class="card">
+            <div class="card-title">Журнал поїздок (<span id="tripCountBadge">0</span>)</div>
+            <div id="tripsList">
+                <p style="text-align: center; color: var(--text-secondary); padding: 12px;">Поїздок поки немає.</p>
+            </div>
+        </section>
+
+        <!-- 5. Кнопки дій з файлами -->
+        <section class="btn-group btn-group-3">
+            <input type="file" id="csvFileInput" accept=".csv" class="hidden">
+            <button class="btn btn-secondary" id="btnImport">Імпорт CSV</button>
+            <button class="btn btn-primary" id="btnExport">Експорт CSV</button>
+            <button class="btn btn-outline-danger" id="btnClear">Очистити все</button>
+        </section>
+
+    </div>
+
+    <!-- Модальне вікно підтвердження видалення/очищення -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">Підтвердження</div>
+            <div id="modalMessage">Ви дійсно бажаєте виконати цю дію?</div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary btn-sm" id="modalBtnCancel">Скасувати</button>
+                <button class="btn btn-danger btn-sm" id="modalBtnConfirm">Підтвердити</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Повідомлення Тоаст -->
+    <div id="snackbar"></div>
+
+    <!-- JavaScript модулі в порядку залежностей -->
+    <script src="js/calculations.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/csv.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
