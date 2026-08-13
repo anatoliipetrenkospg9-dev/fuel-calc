@@ -81,18 +81,48 @@ header h1 {
     gap: 12px;
 }
 
+.grid-1 {
+    grid-template-columns: 1fr;
+}
+
 @media (min-width: 600px) {
     .grid-2 {
         grid-template-columns: 1fr 1fr;
+        align-items: stretch;
     }
     .grid-3 {
         grid-template-columns: 1fr 1fr 1fr;
     }
 }
 
+/* Route field auto-resize styling */
+#tripRoute {
+    height: 48px;
+    min-height: 48px;
+    max-height: 300px;
+    padding: 12px 14px;
+    overflow: hidden;
+    resize: none;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+}
+
 .form-group {
     display: flex;
     flex-direction: column;
+}
+
+@media (min-width: 600px) {
+    .form-group {
+        align-items: stretch;
+    }
+    
+    .form-group input[type="number"] {
+        height: 100%;
+        flex-grow: 1;
+    }
 }
 
 .form-group label {
@@ -112,7 +142,8 @@ header h1 {
 input[type="text"],
 input[type="number"],
 input[type="date"],
-input[type="time"] {
+input[type="time"],
+textarea {
     width: 100%;
     padding: 12px 14px;
     border: 2px solid var(--border-color);
@@ -126,7 +157,8 @@ input[type="time"] {
     letter-spacing: 0.2px;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
     border-color: var(--primary-color);
     background-color: #3E4238;
     box-shadow: 0 0 0 3px rgba(194, 155, 56, 0.2);

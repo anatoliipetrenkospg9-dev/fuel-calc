@@ -64,15 +64,18 @@
         <section class="card" id="tripFormSection">
             <div class="card-title" id="formTitle">3. Нова поїздка</div>
             <form id="tripForm" onsubmit="return false;">
-                <div class="grid grid-3">
+                <div class="grid grid-1">
                     <div class="form-group">
                         <label for="tripDate">Дата*</label>
                         <input type="date" id="tripDate">
                         <span class="error-text" id="err-tripDate">Виберіть дату</span>
                     </div>
+                </div>
+
+                <div class="grid grid-2" style="margin-top: 10px;">
                     <div class="form-group">
                         <label for="tripRoute">Маршрут*</label>
-                        <input type="text" id="tripRoute" maxlength="100" placeholder="Харків - Золочів">
+                        <textarea id="tripRoute" maxlength="100" placeholder="Харків - Золочів"></textarea>
                         <span class="error-text" id="err-tripRoute">Введіть маршрут</span>
                     </div>
                     <div class="form-group">

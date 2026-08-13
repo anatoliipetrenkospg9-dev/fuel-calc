@@ -228,6 +228,7 @@ function editTrip(index) {
     document.getElementById("btnCancelEdit").classList.remove("hidden");
 
     document.getElementById("tripFormSection").scrollIntoView({ behavior: 'smooth' });
+    autoResizeTextarea();
     updateLivePreview();
 }
 
@@ -244,6 +245,7 @@ function resetTripForm() {
     document.getElementById("cargoName").value = "";
     document.getElementById("cargoAmount").value = "0";
     
+    autoResizeTextarea();
     updateLivePreview();
 }
 
@@ -278,6 +280,23 @@ function confirmDeleteTrip(index) {
     });
 }
 
+function autoResizeTextarea() {
+    const textarea = document.getElementById("tripRoute");
+    if (textarea) {
+        const singleLineHeight = 48; // Original default height
+        textarea.style.height = "auto";
+        const scrollHeight = textarea.scrollHeight;
+        
+        // Only expand if content actually needs more than one line
+        // Add small buffer to account for line-height variations
+        if (scrollHeight > singleLineHeight + 5) {
+            textarea.style.height = scrollHeight + "px";
+        } else {
+            textarea.style.height = singleLineHeight + "px";
+        }
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("tripDate").value = new Date().toISOString().split('T')[0];
 
@@ -291,6 +310,12 @@ document.addEventListener("DOMContentLoaded", () => {
     liveInputs.forEach(id => {
         document.getElementById(id).addEventListener("input", updateLivePreview);
     });
+
+    // Auto-resize textarea for Route field
+    const tripRouteTextarea = document.getElementById("tripRoute");
+    if (tripRouteTextarea) {
+        tripRouteTextarea.addEventListener("input", autoResizeTextarea);
+    }
 
     ["vehicleName", "vehicleConsumption", "waybillNumber", "initialBR"].forEach(id => {
         document.getElementById(id).addEventListener("change", () => {
