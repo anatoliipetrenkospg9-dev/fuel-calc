@@ -246,11 +246,19 @@ function resetTripForm() {
     document.getElementById("btnSaveTrip").innerText = "Додати поїздку";
     document.getElementById("btnCancelEdit").classList.add("hidden");
 
-    document.getElementById("tripRoute").value = "";
+    // Автозаповнення маршруту та вантажу з останньої поїздки
+    if (state.trips.length > 0) {
+        const lastTrip = state.trips[state.trips.length - 1];
+        document.getElementById("tripRoute").value = lastTrip.route || "";
+        document.getElementById("cargoName").value = lastTrip.cargoName || "";
+    } else {
+        document.getElementById("tripRoute").value = "";
+        document.getElementById("cargoName").value = "";
+    }
+    
     document.getElementById("tripCount").value = "1";
     document.getElementById("distLoaded").value = "0";
     document.getElementById("distUnloaded").value = "0";
-    document.getElementById("cargoName").value = "";
     document.getElementById("cargoAmount").value = "0";
     
     autoResizeTextarea();

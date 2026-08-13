@@ -192,5 +192,6 @@ function parseAndLoadCSV(text) {
 
     saveState();
     updateUI();
+    resetTripForm();
     showToast("Дані успішно імпортовано");
 }
