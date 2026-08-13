@@ -28,11 +28,11 @@ function recalculateAllTrips() {
             ? trip.startFuelOverride
             : currentFuel;
 
-        const totalDist = calculateTotalDistance(
-            Number(trip.distLoaded) || 0,
-            Number(trip.distUnloaded) || 0,
-            Number(trip.tripCount) || 1
-        );
+        // Множимо дистанції на кількість поїздок, як у updateLivePreview()
+        const tripCount = Number(trip.tripCount) || 1;
+        const totalDistL = calculateFullLoadedDistance(Number(trip.distLoaded) || 0, tripCount);
+        const totalDistU = calculateFullUnloadedDistance(Number(trip.distUnloaded) || 0, tripCount);
+        const totalDist = calculateTotalDistance(totalDistL, totalDistU);
 
         const speedometer = calculateSpeedometer(startSpeedometer, totalDist);
         const loadedCons = calculateLoadedConsumption(baseConsumption, Number(trip.cargoAmount) || 0);

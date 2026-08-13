@@ -73,8 +73,9 @@ function updateLivePreview() {
     const tCount = parseInt(document.getElementById("tripCount").value, 10) || 1;
     const cargoAmt = parseNum(document.getElementById("cargoAmount").value);
     const brVal = document.getElementById("initialBR").value.trim();
-
-    const totalDist = calculateTotalDistance(distL, distU, tCount);
+    const totalDistL = calculateFullLoadedDistance(distL, tCount); 
+    const totalDistU = calculateFullUnloadedDistance(distU, tCount); 
+    const totalDist = calculateTotalDistance(totalDistL, totalDistU);
     const endSpeedo = calculateSpeedometer(startSpeedo, totalDist);
     const loadedCons = calculateLoadedConsumption(baseCons, cargoAmt);
     const offRoadExact = calculateOffRoadConsumption(totalDist, loadedCons);
@@ -83,8 +84,8 @@ function updateLivePreview() {
 
     // Пряме виведення за єдиним правилом
     document.getElementById("prevBR").innerText = brVal || "-";
-    document.getElementById("prevDistLoaded").innerText = `${formatUaNum(distL)} км`;
-    document.getElementById("prevDistUnloaded").innerText = `${formatUaNum(distU)} км`;
+    document.getElementById("prevDistLoaded").innerText = `${formatUaNum(totalDistL)} км`;
+    document.getElementById("prevDistUnloaded").innerText = `${formatUaNum(totalDistU)} км`;
     document.getElementById("prevTotalDist").innerText = `${formatUaNum(totalDist)} км`;
     document.getElementById("prevSpeedometer").innerText = `${formatUaNum(endSpeedo, 0)} км`;
     document.getElementById("prevLoadedCons").innerText = `${formatUaNum(loadedCons, 2)} л/100 км`;
@@ -120,8 +121,8 @@ function renderTripList() {
             <div class="detail-item" style="grid-column: 1 / -1;"><span class="detail-label">Шляховий лист:</span><span class="detail-value">${state.vehicle.waybillNumber}</span></div>
                 <div class="detail-item"><span class="detail-label">Маршрут:</span><span class="detail-value">${routeDisp}</span></div>
                 <div class="detail-item"><span class="detail-label">Час:</span><span class="detail-value">${trip.depTime} - ${trip.arrTime}</span></div>
-                <div class="detail-item"><span class="detail-label">З вантажем:</span><span class="detail-value detail-value-special">${formatUaNum(trip.distLoaded)} км</span></div>
-                <div class="detail-item"><span class="detail-label">Без вантажу:</span><span class="detail-value">${formatUaNum(trip.distUnloaded)} км</span></div>
+                <div class="detail-item"><span class="detail-label">З вантажем:</span><span class="detail-value detail-value-special">${formatUaNum(calculateFullLoadedDistance(trip.distLoaded, trip.tripCount))} км</span></div>
+                <div class="detail-item"><span class="detail-label">Без вантажу:</span><span class="detail-value">${formatUaNum(calculateFullUnloadedDistance(trip.distUnloaded, trip.tripCount))} км</span></div>
                 <div class="detail-item"><span class="detail-label">Усього:</span><span class="detail-value detail-value-special">${formatUaNum(c.totalDistance)} км</span></div>
                 <div class="detail-item"><span class="detail-label">Вантаж:</span><span class="detail-value">${trip.cargoName || '-'}, <span class="detail-value-special">${formatUaNum(trip.cargoAmount)} т</span></span></div>
                 <div class="detail-item"><span class="detail-label">Спідометр:</span><span class="detail-value detail-value-special">${formatUaNum(c.speedometer, 0)} км</span></div>
