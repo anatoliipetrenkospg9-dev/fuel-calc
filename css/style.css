@@ -74,6 +74,10 @@ header h1 {
     padding-bottom: 8px;
     letter-spacing: 0.5px;
 }
+.log-title {
+    justify-content: left;
+}
+
 
 .grid {
     display: grid;
@@ -336,12 +340,17 @@ textarea:focus {
 }
 
 .detail-value {
-    font-weight: 700;
+    font-weight: 500;
     color: var(--text-primary);
-    text-align: left;
+    text-align: right;
     word-break: break-word;
     overflow-wrap: anywhere;
     letter-spacing: 0.2px;
+}
+
+.detail-value-special {
+    font-weight: 700;
+    color: var(--primary-color);
 }
 
 .trip-actions {

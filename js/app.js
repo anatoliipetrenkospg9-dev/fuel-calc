@@ -113,20 +113,22 @@ function renderTripList() {
         <div class="trip-card">
             <div class="trip-header">
                 <span>${dateDisp}</span>
+                <span>${state.vehicle.name}</span>
                 <span>№ ${index + 1}</span>
             </div>
             <div class="trip-details">
+            <div class="detail-item" style="grid-column: 1 / -1;"><span class="detail-label">Шляховий лист:</span><span class="detail-value">${state.vehicle.waybillNumber}</span></div>
                 <div class="detail-item"><span class="detail-label">Маршрут:</span><span class="detail-value">${routeDisp}</span></div>
                 <div class="detail-item"><span class="detail-label">Час:</span><span class="detail-value">${trip.depTime} - ${trip.arrTime}</span></div>
-                <div class="detail-item"><span class="detail-label">З вантажем:</span><span class="detail-value">${formatUaNum(trip.distLoaded)} км</span></div>
+                <div class="detail-item"><span class="detail-label">З вантажем:</span><span class="detail-value detail-value-special">${formatUaNum(trip.distLoaded)} км</span></div>
                 <div class="detail-item"><span class="detail-label">Без вантажу:</span><span class="detail-value">${formatUaNum(trip.distUnloaded)} км</span></div>
-                <div class="detail-item"><span class="detail-label">Усього:</span><span class="detail-value">${formatUaNum(c.totalDistance)} км</span></div>
-                <div class="detail-item"><span class="detail-label">Вантаж:</span><span class="detail-value">${trip.cargoName || '-'}, ${formatUaNum(trip.cargoAmount)} т</span></div>
-                <div class="detail-item"><span class="detail-label">Спідометр:</span><span class="detail-value">${formatUaNum(c.speedometer, 0)} км</span></div>
+                <div class="detail-item"><span class="detail-label">Усього:</span><span class="detail-value detail-value-special">${formatUaNum(c.totalDistance)} км</span></div>
+                <div class="detail-item"><span class="detail-label">Вантаж:</span><span class="detail-value">${trip.cargoName || '-'}, <span class="detail-value-special">${formatUaNum(trip.cargoAmount)} т</span></span></div>
+                <div class="detail-item"><span class="detail-label">Спідометр:</span><span class="detail-value detail-value-special">${formatUaNum(c.speedometer, 0)} км</span></div>
                 <div class="detail-item"><span class="detail-label">Розхід норма:</span><span class="detail-value">${formatUaNum(state.vehicle.consumption, 2)} л</span></div>
-                <div class="detail-item"><span class="detail-label">Розхід вантаж:</span><span class="detail-value">${formatUaNum(c.loadedConsumption, 2)} л/100км</span></div>
-                <div class="detail-item"><span class="detail-label">Бездоріжжя:</span><span class="detail-value">${formatUaNum(c.offRoadFuel, 2)} = ${c.offRoadFuelRounded} л</span></div>
-                <div class="detail-item"><span class="detail-label">Залишок:</span><span class="detail-value" style="${c.remainingFuel < 0 ? 'color:var(--error-color);font-weight:bold;' : ''}">${formatUaNum(c.remainingFuel, 1)} л</span></div>
+                <div class="detail-item"><span class="detail-label">Розхід вантаж:</span><span class="detail-value detail-value-special">${formatUaNum(c.loadedConsumption, 2)} л/100км</span></div>
+                <div class="detail-item"><span class="detail-label">Бездоріжжя:</span><span class="detail-value detail-value-special">${formatUaNum(c.offRoadFuel, 2)} = ${c.offRoadFuelRounded} л</span></div>
+                <div class="detail-item"><span class="detail-label">Залишок:</span><span class="detail-value detail-value-special" style="${c.remainingFuel < 0 ? 'color:var(--error-color);font-weight:bold;' : ''}">${formatUaNum(c.remainingFuel, 1)} л</span></div>
                 <div class="detail-item" style="grid-column: 1 / -1;"><span class="detail-label">БР:</span><span class="detail-value">${trip.br}</span></div>
             </div>
             <div class="trip-actions">
@@ -197,12 +199,11 @@ function saveTripFromForm() {
 
     saveState();
 
-    if (state.editingIndex === -1) {
-        const lastTrip = state.trips[state.trips.length - 1];
-        if (lastTrip && lastTrip.calculated) {
-            state.vehicle.displaySpeedometer = lastTrip.calculated.speedometer;
-            state.vehicle.displayFuel = lastTrip.calculated.remainingFuel;
-        }
+    // Завжди оновлюємо значення на основі останньої поїздки (при додаванні чи редаганні)
+    const lastTrip = state.trips[state.trips.length - 1];
+    if (lastTrip && lastTrip.calculated) {
+        state.vehicle.displaySpeedometer = lastTrip.calculated.speedometer;
+        state.vehicle.displayFuel = lastTrip.calculated.remainingFuel;
     }
 
     resetTripForm();
@@ -223,6 +224,13 @@ function editTrip(index) {
     document.getElementById("distUnloaded").value = trip.distUnloaded;
     document.getElementById("cargoName").value = trip.cargoName;
     document.getElementById("cargoAmount").value = trip.cargoAmount;
+    
+    // Populate odometer and fuel from the trip's calculated starting values
+    if (trip.calculated) {
+        document.getElementById("initialSpeedometer").value = trip.calculated.startSpeedometer || "";
+        document.getElementById("initialFuel").value = trip.calculated.startFuel || "";
+    }
+    
     document.getElementById("formTitle").innerText = `Редагування поїздки №${index + 1}`;
     document.getElementById("btnSaveTrip").innerText = "Зберегти зміни";
     document.getElementById("btnCancelEdit").classList.remove("hidden");
