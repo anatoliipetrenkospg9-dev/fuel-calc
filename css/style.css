@@ -47,6 +47,10 @@ header h1 {
     text-transform: uppercase;
 }
 
+.unit{
+    color: var(--text-secondary);
+}
+
 .container {
     max-width: 800px;
     margin: 0 auto;
