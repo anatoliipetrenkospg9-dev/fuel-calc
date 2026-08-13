@@ -292,6 +292,20 @@ function confirmDeleteTrip(index) {
         }
 
         saveState();
+
+        // Оновлюємо значення на основі останньої поїздки, яка лишилась
+        if (state.trips.length > 0) {
+            const lastTrip = state.trips[state.trips.length - 1];
+            if (lastTrip && lastTrip.calculated) {
+                state.vehicle.displaySpeedometer = lastTrip.calculated.speedometer;
+                state.vehicle.displayFuel = lastTrip.calculated.remainingFuel;
+            }
+        } else {
+            // Якщо поїздок більше немає, очищуємо display значення
+            state.vehicle.displaySpeedometer = null;
+            state.vehicle.displayFuel = null;
+        }
+
         updateUI();
         showToast("Поїздку видалено");
     });
