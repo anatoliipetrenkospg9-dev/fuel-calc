@@ -3,6 +3,10 @@ function generateCSVFileName() {
         .replace(/[\/\\?%*:|"<>]/g, '')
         .replace(/\s+/g, '');
 
+    // Витягуємо номер шляхового листа від "№" до " від"
+    const waybillMatch = state.vehicle.waybillNumber.match(/№\s*([^\s]+)\s+від/);
+    const waybillNumber = waybillMatch ? waybillMatch[1] : "БЛ";
+
     let startDate = "YYYY.MM.DD";
     let endDate = "YYYY.MM.DD";
 
@@ -25,7 +29,7 @@ function generateCSVFileName() {
         : startSpeedo;
 
     const datePart = (startDate === endDate) ? startDate : `${startDate}-${endDate}`;
-    return `${datePart}-${vehicleNameClean}(${startSpeedo}-${endSpeedo}).csv`;
+    return `${waybillNumber}-${datePart}-${vehicleNameClean}(${startSpeedo}-${endSpeedo}).csv`;
 }
 
 function exportCSV() {
