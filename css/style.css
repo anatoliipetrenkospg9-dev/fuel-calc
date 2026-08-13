@@ -315,7 +315,10 @@ textarea:focus {
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 8px;
     margin-bottom: 10px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.1px;
+}
+.trip-header-content {
+    color: #8B7524;
 }
 
 .trip-details {

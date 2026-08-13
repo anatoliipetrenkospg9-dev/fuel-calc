@@ -118,7 +118,7 @@ function renderTripList() {
         <div class="trip-card">
             <div class="trip-header">
                 <span>${dateDisp}</span>
-                <span>${state.vehicle.name}</span>
+                <span class="trip-header-content">${state.vehicle.name}</span>
                 <span>№ ${index + 1}</span>
             </div>
             <div class="trip-details">
